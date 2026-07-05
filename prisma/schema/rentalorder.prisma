@@ -1,0 +1,54 @@
+model RentalOrder {
+  id              String          @id @default(uuid())
+
+  customerId      String
+
+  startDate       DateTime
+
+  endDate         DateTime
+
+  totalDays       Int
+
+  subtotal        Float
+
+  discount        Float?          @default(0)
+
+  totalAmount     Float
+
+  orderStatus     OrderStatus     @default(PLACED)
+
+  paymentStatus   PaymentStatus   @default(PENDING)
+
+  pickupAddress   String
+
+  notes           String?
+
+  createdAt       DateTime        @default(now())
+
+  updatedAt       DateTime        @updatedAt
+
+  customer        User            @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  items           RentalItem[]
+
+  payment         Payment?
+
+  @@index([customerId])
+  @@index([orderStatus])
+  @@index([paymentStatus])
+}
+
+enum OrderStatus {
+  PLACED
+  CONFIRMED
+  PAID
+  PICKED_UP
+  RETURNED
+  CANCELLED
+}
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  REFUNDED
+}

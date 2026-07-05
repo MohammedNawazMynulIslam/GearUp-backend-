@@ -1,0 +1,27 @@
+model Payment {
+  id                String            @id @default(uuid())
+
+  orderId           String            @unique
+
+  transactionId     String?           @unique
+
+  provider          PaymentProvider
+
+  amount            Float
+
+  status            PaymentStatus     @default(PENDING)
+
+  paidAt            DateTime?
+
+  createdAt         DateTime          @default(now())
+
+  updatedAt         DateTime          @updatedAt
+
+  order             RentalOrder       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+   @@index([status])
+}
+
+enum PaymentProvider {
+  STRIPE
+}

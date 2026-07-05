@@ -1,0 +1,43 @@
+model Gear {
+  id              String      @id @default(uuid())
+
+  providerId      String
+  categoryId      String
+
+  title           String
+  description     String
+
+  brand           String
+
+  pricePerDay     Float
+
+  stock           Int
+
+  images          String[]
+
+  specifications  Json?
+
+  isAvailable     Boolean     @default(true)
+
+  averageRating   Float       @default(0)
+
+  totalReviews    Int         @default(0)
+
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  provider        User        @relation(fields: [providerId], references: [id], onDelete: Cascade)
+
+  category        Category    @relation(fields: [categoryId], references: [id])
+
+  rentalItems     RentalItem[]
+
+  reviews         Review[]
+
+
+
+  @@index([providerId])
+  @@index([categoryId])
+  @@index([brand])
+  @@index([pricePerDay])
+}

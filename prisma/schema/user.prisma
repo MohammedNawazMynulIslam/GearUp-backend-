@@ -1,0 +1,27 @@
+model User {
+  id          String       @id @default(uuid())
+  name        String
+  email       String       @unique
+  password    String
+  phone       String?
+  address     String?
+  role        Role
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  // Relations
+
+  gearItems      Gear[]
+  rentalOrders   RentalOrder[]
+  reviews        Review[]
+
+
+  @@index([role])
+  
+}
+
+enum Role {
+  ADMIN
+  PROVIDER
+  CUSTOMER
+}
