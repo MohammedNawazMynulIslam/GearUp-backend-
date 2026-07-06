@@ -2,9 +2,11 @@ import cookieParser from "cookie-parser";
 import express,{ Application, Request, Response } from "express";
 import config from "./config";
 import cors from "cors";
+import { prisma } from "./lib/prisma";
+import httpStatus from "http-status";
+
+
 const app : Application = express();
-
-
 
 app.use(cors({
     origin: config.app_url,
@@ -17,10 +19,16 @@ app.use((cookieParser()));
 
 
 
-app.get("/", (req: Request, res: Response) => {
+app.get("/", async (req: Request, res: Response) => {
+    const user = await prisma.user.findMany();
+    console.log(user);
     res.send("Hello, World!");
 });
 
-app.get("/api/auth/register")
+app.post("/api/auth/register", async (req: Request, res: Response) => {
+const payload = req.body;
+
+res.status(httpStatus.CREATED).json({ message: "User registered successfully" });
+})
 
 export default app;

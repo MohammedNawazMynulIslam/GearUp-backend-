@@ -8,14 +8,9 @@ model User {
   role        Role
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
-
-  // Relations
-
   gearItems      Gear[]
   rentalOrders   RentalOrder[]
   reviews        Review[]
-
-
   @@index([role])
   
 }
