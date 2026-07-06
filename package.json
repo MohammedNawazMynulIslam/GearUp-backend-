@@ -46,5 +46,8 @@
     "morgan": "^1.11.0",
     "pg": "^8.22.0",
     "zod": "^4.4.3"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   }
 }
