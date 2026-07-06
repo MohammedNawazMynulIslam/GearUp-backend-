@@ -1,17 +1,47 @@
 import dotenv from "dotenv";
 import path from "path";
+import { z } from "zod";
 
-dotenv.config({path: path.join(process.cwd(), ".env")});
+dotenv.config({
+  path: path.join(process.cwd(), ".env"),
+});
 
+const envSchema = z.object({
+  PORT: z.string().default("3000"),
+  APP_URL: z.string().default("http://localhost:3000"),
+
+  DATABASE_URL: z.string(),
+
+  BCRYPT_SALT_ROUNDS: z.string(),
+
+  JWT_ACCESS_SECRET: z.string(),
+  JWT_REFRESH_SECRET: z.string(),
+
+  JWT_ACCESS_EXPIRES_IN: z.string(),
+  JWT_REFRESH_EXPIRES_IN: z.string(),
+});
+
+const parsedEnv = envSchema.safeParse(process.env);
+
+if (!parsedEnv.success) {
+  console.error("Invalid environment variables");
+  console.error(parsedEnv.error.flatten().fieldErrors);
+  process.exit(1);
+}
+
+const env = parsedEnv.data;
 
 export default {
-    PORT: process.env.PORT || 3000,
-    app_url: process.env.APP_URL || "http://localhost:3000",
-    database_url: process.env.DATABASE_URL,
-    bcrypt_salt_rounds: process.env.BCRYPT_SALT_ROUNDS,
-    jwt_access_secret: process.env.JWT_ACCESS_SECRET,
-    jwt_refresh_secret: process.env.JWT_REFRESH_SECRET,
-    jwt_access_expires_in: process.env.JWT_ACCESS_EXPIRES_IN,
-    jwt_refresh_expires_in: process.env.JWT_REFRESH_EXPIRES_IN,
+  PORT: Number(env.PORT),
+  APP_URL: env.APP_URL,
 
-}
+  DATABASE_URL: env.DATABASE_URL,
+
+  BCRYPT_SALT_ROUNDS: Number(env.BCRYPT_SALT_ROUNDS),
+
+  JWT_ACCESS_SECRET: env.JWT_ACCESS_SECRET,
+  JWT_REFRESH_SECRET: env.JWT_REFRESH_SECRET,
+
+  JWT_ACCESS_EXPIRES_IN: env.JWT_ACCESS_EXPIRES_IN,
+  JWT_REFRESH_EXPIRES_IN: env.JWT_REFRESH_EXPIRES_IN,
+};

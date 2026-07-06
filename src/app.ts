@@ -4,19 +4,22 @@ import config from "./config";
 import cors from "cors";
 import { prisma } from "./lib/prisma";
 import httpStatus from "http-status";
+import notFound from "./app/middlewares/constants/notFound";
+import globalErrorHandler from "./app/middlewares/constants/globalErrorHandler";
 
 
 const app : Application = express();
 
 app.use(cors({
-    origin: config.app_url,
+    origin: config.APP_URL,
     credentials: true
 }))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use((cookieParser()));
 
-
+app.use(notFound);
+app.use(globalErrorHandler);
 
 
 app.get("/", async (req: Request, res: Response) => {

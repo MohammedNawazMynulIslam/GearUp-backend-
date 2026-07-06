@@ -12,15 +12,17 @@
     "lint": "tslint -c tslint.json src/**/*.ts",
     "prepublish": "npm run build",
     "dev": "tsx watch src/server.ts",
-    "start": "node dist/server.ts"
+    "start": "node dist/server.js"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/express": "^5.0.6",
     "@types/pg": "^8.20.0",
+    "eslint": "^10.6.0",
     "prisma": "^7.8.0",
-    "tslint": "^5.20.1",
     "tsx": "^4.23.0",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.62.1"
   },
   "files": [
     "./bin/*",
@@ -38,8 +40,10 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "helmet": "^8.2.0",
     "http-status": "^2.1.0",
     "jsonwebtoken": "^9.0.3",
+    "morgan": "^1.11.0",
     "pg": "^8.22.0",
     "zod": "^4.4.3"
   }
