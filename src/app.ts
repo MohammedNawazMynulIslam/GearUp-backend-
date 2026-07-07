@@ -8,6 +8,8 @@ import globalErrorHandler from "./app/middlewares/constants/globalErrorHandler";
 import { authRoutes } from "./app/modules/auth/auth.route";
 import { categoryRoutes } from "./app/modules/category/category.route";
 import { gearRoutes } from "./app/modules/gear/gear.route";
+import { paymentRoutes } from "./app/modules/payment/payment.route";
+import { paymentWebhookRoutes } from "./app/modules/payment/payment.webhook.route";
 import { rentalRoutes } from "./app/modules/rental/rental.route";
 
 
@@ -17,6 +19,9 @@ app.use(cors({
     origin: config.APP_URL,
     credentials: true
 }))
+
+app.use("/api", paymentWebhookRoutes);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use((cookieParser()));
@@ -25,6 +30,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api", gearRoutes);
 app.use("/api", rentalRoutes);
+app.use("/api", paymentRoutes);
 
 app.use(notFound);
 app.use(globalErrorHandler);

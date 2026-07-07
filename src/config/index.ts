@@ -19,6 +19,10 @@ const envSchema = z.object({
 
   JWT_ACCESS_EXPIRES_IN: z.string(),
   JWT_REFRESH_EXPIRES_IN: z.string(),
+
+  STRIPE_SECRET_KEY: z.string(),
+
+  STRIPE_WEBHOOK_SECRET: z.string().default(""),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);
@@ -44,4 +48,8 @@ export default {
 
   JWT_ACCESS_EXPIRES_IN: env.JWT_ACCESS_EXPIRES_IN,
   JWT_REFRESH_EXPIRES_IN: env.JWT_REFRESH_EXPIRES_IN,
+
+  STRIPE_SECRET_KEY: env.STRIPE_SECRET_KEY,
+
+  STRIPE_WEBHOOK_SECRET: env.STRIPE_WEBHOOK_SECRET,
 };
