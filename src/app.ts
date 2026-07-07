@@ -8,6 +8,7 @@ import globalErrorHandler from "./app/middlewares/constants/globalErrorHandler";
 import { authRoutes } from "./app/modules/auth/auth.route";
 import { categoryRoutes } from "./app/modules/category/category.route";
 import { gearRoutes } from "./app/modules/gear/gear.route";
+import { rentalRoutes } from "./app/modules/rental/rental.route";
 
 
 const app : Application = express();
@@ -23,6 +24,7 @@ app.use((cookieParser()));
 app.use("/api/auth", authRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api", gearRoutes);
+app.use("/api", rentalRoutes);
 
 app.use(notFound);
 app.use(globalErrorHandler);
