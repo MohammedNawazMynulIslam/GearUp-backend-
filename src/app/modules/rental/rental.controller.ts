@@ -103,10 +103,31 @@ const updateProviderOrder = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const cancelCustomerOrder = catchAsync(async (req: Request, res: Response) => {
+  if (!req.user) {
+    throw new AppError(httpStatus.UNAUTHORIZED, "Authentication required");
+  }
+
+  const id = req.params.id as string;
+  if (!id) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Rental id is required");
+  }
+
+  const data = await rentalService.cancelCustomerOrder(req.user.id, id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Rental order cancelled successfully",
+    data,
+  });
+});
+
 export const rentalController = {
   createRental,
   getCustomerRentals,
   getRentalById,
   getProviderOrders,
   updateProviderOrder,
+  cancelCustomerOrder,
 };

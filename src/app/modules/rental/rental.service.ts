@@ -36,13 +36,15 @@ const rentalInclude = {
 };
 
 const VALID_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
-  PLACED: ["CONFIRMED", "CANCELLED"],
-  CONFIRMED: ["PAID", "PICKED_UP", "CANCELLED"],
-  PAID: ["PICKED_UP", "CANCELLED"],
+  PLACED: ["CONFIRMED"],
+  CONFIRMED: ["PAID", "PICKED_UP"],
+  PAID: ["PICKED_UP"],
   PICKED_UP: ["RETURNED"],
   RETURNED: [],
   CANCELLED: [],
 };
+
+const CUSTOMER_CANCEL_TRANSITIONS: OrderStatus[] = ["PLACED"];
 
 const calculateTotalDays = (startDate: Date, endDate: Date): number => {
   const ms = endDate.getTime() - startDate.getTime();
@@ -398,26 +400,52 @@ const updateProviderOrder = async (
     });
   }
 
-  if (next === "CANCELLED" && current === "CONFIRMED") {
-    return prisma.$transaction(async (tx) => {
-      for (const item of order.items) {
-        await tx.gear.update({
-          where: { id: item.gearId },
-          data: { stock: { increment: item.quantity } },
-        });
-      }
+  return prisma.rentalOrder.update({
+    where: { id: orderId },
+    data: { orderStatus: next },
+    include: rentalInclude,
+  });
+};
 
-      return tx.rentalOrder.update({
-        where: { id: orderId },
-        data: { orderStatus: next },
-        include: rentalInclude,
-      });
-    });
+const cancelCustomerOrder = async (
+  customerId: string,
+  orderId: string
+) => {
+  const order = await prisma.rentalOrder.findUnique({
+    where: { id: orderId },
+    include: rentalInclude,
+  });
+
+  if (!order) {
+    throw new AppError(httpStatus.NOT_FOUND, "Rental order not found");
+  }
+
+  if (order.customerId !== customerId) {
+    throw new AppError(
+      httpStatus.FORBIDDEN,
+      "You can only cancel your own orders"
+    );
+  }
+
+  const current = order.orderStatus;
+
+  if (current === OrderStatus.CANCELLED) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Order is already cancelled"
+    );
+  }
+
+  if (!CUSTOMER_CANCEL_TRANSITIONS.includes(current)) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      `Order can no longer be cancelled from status ${current}`
+    );
   }
 
   return prisma.rentalOrder.update({
     where: { id: orderId },
-    data: { orderStatus: next },
+    data: { orderStatus: OrderStatus.CANCELLED },
     include: rentalInclude,
   });
 };
@@ -428,4 +456,5 @@ export const rentalService = {
   getRentalById,
   getProviderOrders,
   updateProviderOrder,
+  cancelCustomerOrder,
 };

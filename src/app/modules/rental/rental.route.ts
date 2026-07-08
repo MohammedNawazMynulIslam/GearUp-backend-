@@ -104,4 +104,12 @@ router.patch(
   rentalController.updateProviderOrder
 );
 
+router.patch(
+  "/rentals/:id/cancel",
+  authenticate,
+  authorizeCustomer,
+  validateRequest(rentalParamsValidationSchema),
+  rentalController.cancelCustomerOrder
+);
+
 export const rentalRoutes = router;
