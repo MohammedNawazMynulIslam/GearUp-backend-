@@ -6,6 +6,7 @@ import { prisma } from "./lib/prisma";
 import notFound from "./app/middlewares/constants/notFound";
 import globalErrorHandler from "./app/middlewares/constants/globalErrorHandler";
 import { authRoutes } from "./app/modules/auth/auth.route";
+import { adminRoutes } from "./app/modules/admin/admin.route";
 import { categoryRoutes } from "./app/modules/category/category.route";
 import { gearRoutes } from "./app/modules/gear/gear.route";
 import { paymentRoutes } from "./app/modules/payment/payment.route";
@@ -28,6 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use((cookieParser()));
 
 app.use("/api/auth", authRoutes);
+app.use("/api", adminRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api", gearRoutes);
 app.use("/api", rentalRoutes);

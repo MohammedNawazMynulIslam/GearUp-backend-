@@ -89,6 +89,10 @@ const loginUser = async (
     throw new AppError(httpStatus.UNAUTHORIZED, "Invalid email or password");
   }
 
+  if (user.isSuspended) {
+    throw new AppError(httpStatus.FORBIDDEN, "Your account has been suspended");
+  }
+
   const matched = await comparePassword(payload.password, user.password);
   if (!matched) {
     throw new AppError(httpStatus.UNAUTHORIZED, "Invalid email or password");
