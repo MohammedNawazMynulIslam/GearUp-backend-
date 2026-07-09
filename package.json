@@ -14,7 +14,7 @@
     "dev": "tsx watch ./src/server.ts",
     "start": "node dist/server.js",
     "seed": "tsx prisma/seed.ts",
-    "postinstall": "prisma generated"
+    "postinstall": "prisma generate"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
