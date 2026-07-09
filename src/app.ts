@@ -2,7 +2,6 @@ import cookieParser from "cookie-parser";
 import express,{ Application, Request, Response } from "express";
 import config from "./config";
 import cors from "cors";
-import { prisma } from "./lib/prisma";
 import notFound from "./app/middlewares/constants/notFound";
 import globalErrorHandler from "./app/middlewares/constants/globalErrorHandler";
 import { authRoutes } from "./app/modules/auth/auth.route";
@@ -40,10 +39,12 @@ app.use(notFound);
 app.use(globalErrorHandler);
 
 
-app.get("/", async (req: Request, res: Response) => {
-    const user = await prisma.user.findMany();
-    console.log(user);
-    res.send("Hello, World!");
-});
+app.get("/", (req: Request, res: Response) => {
+    res.json({
+      success: true,
+      message: "GearUp API is running",
+      data: null,
+    });
+  });
 
 export default app;

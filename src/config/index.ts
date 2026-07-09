@@ -25,6 +25,12 @@ const envSchema = z.object({
   STRIPE_WEBHOOK_SECRET: z.string().default(""),
 });
 
+if (process.env.NODE_ENV === "production" && process.env.STRIPE_WEBHOOK_SECRET === "") {
+  console.warn(
+    "STRIPE_WEBHOOK_SECRET is not set in production; Stripe webhooks will fail signature verification."
+  );
+}
+
 const parsedEnv = envSchema.safeParse(process.env);
 
 if (!parsedEnv.success) {

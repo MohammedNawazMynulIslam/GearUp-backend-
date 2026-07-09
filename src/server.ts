@@ -2,22 +2,27 @@ import app from "./app";
 import config from "./config";
 import { prisma } from "./lib/prisma";
 import "dotenv/config";
-const PORT = config.PORT;
 
+const isVercel = Boolean(process.env.VERCEL);
 
-async function main() {
-    try{
-        await prisma.$connect();
-        console.log("Connected to the database successfully")
-        app.listen(PORT, () => {
-     
+if (!isVercel) {
+  const PORT = config.PORT;
+
+  async function main() {
+    try {
+      await prisma.$connect();
+      console.log("Connected to the database successfully");
+      app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
-    });
+      });
+    } catch (error) {
+      console.error("Error starting the server:", error);
+      await prisma.$disconnect();
+      process.exit(1);
     }
-    catch (error) {
-        console.error("Error starting the server:", error);
-        await prisma.$disconnect();
-        process.exit(1);
-    }
+  }
+
+  main();
 }
-main()
+
+export default app;
