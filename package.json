@@ -8,11 +8,13 @@
   "main": "server.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
+    "build": "prisma generate && tsup",
     "lint": "tslint -c tslint.json src/**/*.ts",
     "prepublish": "npm run build",
-    "dev": "tsx watch src/server.ts",
-    "start": "node dist/server.js"
+    "dev": "tsx watch ./src/server.ts",
+    "start": "node dist/server.js",
+    "seed": "tsx prisma/seed.ts",
+    "postinstall": "prisma generated"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -46,6 +48,7 @@
     "morgan": "^1.11.0",
     "pg": "^8.22.0",
     "stripe": "^22.3.0",
+    "tsup": "^8.5.1",
     "zod": "^4.4.3"
   },
   "prisma": {
