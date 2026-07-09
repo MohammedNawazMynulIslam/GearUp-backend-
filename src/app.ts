@@ -27,6 +27,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use((cookieParser()));
 
+app.get("/", (req: Request, res: Response) => {
+    res.json({
+      success: true,
+      message: "GearUp API is running",
+      data: null,
+    });
+  });
+
 app.use("/api/auth", authRoutes);
 app.use("/api", adminRoutes);
 app.use("/api/categories", categoryRoutes);
@@ -37,14 +45,5 @@ app.use("/api", reviewRoutes);
 
 app.use(notFound);
 app.use(globalErrorHandler);
-
-
-app.get("/", (req: Request, res: Response) => {
-    res.json({
-      success: true,
-      message: "GearUp API is running",
-      data: null,
-    });
-  });
 
 export default app;
