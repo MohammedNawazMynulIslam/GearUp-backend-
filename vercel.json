@@ -3,14 +3,14 @@
   "buildCommand": "npm run build",
   "installCommand": "npm install",
   "functions": {
-    "dist/server.js": {
+    "api/index.js": {
       "maxDuration": 60
     }
   },
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/dist/server.js"
+      "dest": "/api/index"
     }
   ]
 }
